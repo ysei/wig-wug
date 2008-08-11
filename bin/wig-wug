@@ -16,9 +16,9 @@ while line = STDIN.gets do
   ]
 
   matrix = [
-    [ fields[2], fields[3], fields[ 4] ],
-    [ fields[5], fields[6], fields[ 7] ],
-    [ fields[8], fields[9], fields[10] ]
+    [ fields[2] || 'O', fields[3] || 'O', fields[ 4] || 'O' ],
+    [ fields[5] || 'O', fields[6] || 'P', fields[ 7] || 'O' ],
+    [ fields[8] || 'O', fields[9] || 'O', fields[10] || 'O' ]
   ]
 
   p digger.move!( distance, matrix )
