@@ -5,4 +5,23 @@ require File.expand_path(
 
 # Put your code here
 
+digger = eval "WigWug::Diggers::#{ARGV[0]}.new"
+
+while line = STDIN.gets do
+  fields = line.split
+
+  distance = [
+    fields[0].to_i,
+    fields[1].to_i
+  ]
+
+  matrix = [
+    [ fields[2], fields[3], fields[ 4] ],
+    [ fields[5], fields[6], fields[ 7] ],
+    [ fields[8], fields[9], fields[10] ]
+  ]
+
+  p digger.move!( distance, matrix )
+end
+
 # EOF
