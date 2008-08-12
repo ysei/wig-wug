@@ -90,7 +90,7 @@ module WigWug
       raise unless distance[0].is_a?(Integer)
       raise unless distance[1].is_a?(Integer)
 
-      raise if distance == [0, 0]
+      raise "Yay, I already won!" if distance == [0, 0]
 
       raise if distance.sort[0] < 0
     end

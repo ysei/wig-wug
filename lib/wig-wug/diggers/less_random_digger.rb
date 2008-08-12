@@ -15,10 +15,11 @@ module WigWug
             super [ :left, :right ]
           end
         when 1
-          dirs = 
-            [ (@board.position[0] < @board.destination[0] ? :right : :left) ]
-          dirs <<
-            [ (@board.position[1] < @board.destination[1] ? :up    : :down) ]
+          dirs = []
+          dirs << :up    if @board.position[1] < @board.destination[1]
+          dirs << :down  if @board.position[1] > @board.destination[1]
+          dirs << :left  if @board.position[0] > @board.destination[0]
+          dirs << :right if @board.position[0] < @board.destination[0]
           super dirs.flatten
         else
           raise
