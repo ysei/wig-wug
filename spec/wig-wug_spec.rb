@@ -557,6 +557,40 @@ describe WigWug do
         end
       end
     end
+
+    context "look around method" do
+      before :each do
+        @board = Board.new
+        matrix = [
+          [:upleft,   :up,   :upright  ],
+          [:left,     'P',   :right    ],
+          [:downleft, :down, :downright]
+        ]
+        @board.send(:first_time, [0,0])
+        @board.send(:store_board, matrix)
+      end
+
+      specify "look method should exist" do
+        @board.should respond_to("look")
+      end
+
+      [
+        [ :up,        "",     " + 1" ],
+        [ :upright,   " + 1", " + 1" ],
+        [ :right,     " + 1", ""     ],
+        [ :downright, " + 1", " - 1" ],
+        [ :down,      "",     " - 1" ],
+        [ :downleft,  " - 1", " - 1" ],
+        [ :left,      " - 1", ""     ],
+        [ :upleft,    " - 1", " + 1" ]
+      ].each do |array|
+        context "look(:#{array[0]})" do
+          specify "should return the board contents at location [px#{array[1]}, py#{array[2]}]" do
+            @board.look(array[0]).should == array[0]
+          end
+        end
+      end
+    end
   end
 
   context Digger do

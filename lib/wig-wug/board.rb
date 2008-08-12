@@ -58,6 +58,11 @@ module WigWug
       end
     end
 
+    def look direction
+      delta_x, delta_y = deltas(direction)
+      @board[ [position[0] + delta_x, position[1] + delta_y] ]
+    end
+
   private
 
     def first_time distance
@@ -121,6 +126,29 @@ module WigWug
       @board[ [position[0] - 1, position[1] - 1] ] = matrix[2][0]
       @board[ [position[0] - 0, position[1] - 1] ] = matrix[2][1]
       @board[ [position[0] + 1, position[1] - 1] ] = matrix[2][2]
+    end
+
+    def deltas direction
+      case direction
+      when :up
+        [0, 1]
+      when :upright
+        [1, 1]
+      when :right
+        [1, 0]
+      when :downright
+        [1, -1]
+      when :down
+        [0, -1]
+      when :downleft
+        [-1, -1]
+      when :left
+        [-1, 0]
+      when :upleft
+        [-1, 1]
+      else
+        raise
+      end
     end
   end
 

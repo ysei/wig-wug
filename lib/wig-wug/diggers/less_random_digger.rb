@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), 'random_digger')
+
 module WigWug
   module Diggers
 
