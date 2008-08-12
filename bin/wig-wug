@@ -8,12 +8,14 @@ require File.expand_path(
 digger = eval "WigWug::Diggers::#{ARGV[0]}.new"
 
 while line = STDIN.gets do
-  fields = line.split
+  fields = line.upcase.split
 
   distance = [
     fields[0].to_i,
     fields[1].to_i
   ]
+
+  fields = "__#{fields[2]}".split(//) if fields.size == 3
 
   matrix = [
     [ fields[2] || 'O', fields[3] || 'O', fields[ 4] || 'O' ],
