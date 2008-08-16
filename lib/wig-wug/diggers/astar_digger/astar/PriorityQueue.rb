@@ -3,7 +3,7 @@
 #27/Sep/2007
 #note - not really a priority queue at this point
 
-require 'astar/Node'
+require File.join(File.dirname(__FILE__), 'Node')
 
 module AStar
 

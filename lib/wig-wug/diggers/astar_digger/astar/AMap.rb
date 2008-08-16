@@ -1,8 +1,10 @@
 #AStar Map
 #by Marcin Coles
 #27/Sep/2007
-require 'astar/PriorityQueue'
-require 'astar/Node'
+require File.join(File.dirname(__FILE__), 'PriorityQueue')
+require File.join(File.dirname(__FILE__), 'Node')
+
+require 'timeout'
 
 module AStar
 
@@ -77,42 +79,47 @@ module AStar
       end    
     end
 
-    def astar(node_start,node_goal)
-      iterations=0
-      open=PriorityQueue.new()
-      closed=PriorityQueue.new()
-      node_start.calc_h(node_goal)
-      open.push(node_start)
-      while !open.empty? do
-        iterations+=1 #keep track of how many times this itersates
-        node_current=open.find_best
-        if node_current==node_goal then #found the solution
-          puts "Iterations: #{iterations}"
-          return node_current 
-        end       
-        generate_successor_nodes(node_current) do |node_successor|
-          #now doing for each successor node of node_current
-          node_successor.calc_g(node_current)
-          #skip to next node_successor if better one already on open or closed list
-          if open_successor=open.find(node_successor) then 
-            if open_successor<=node_successor then next end  #need to account for nil result
+    def astar(node_start,node_goal, timeout = 60)
+      node_current = nil
+      Timeout::timeout(timeout) {
+        iterations=0
+        open=PriorityQueue.new()
+        closed=PriorityQueue.new()
+        node_start.calc_h(node_goal)
+        open.push(node_start)
+        while !open.empty? do
+          iterations+=1 #keep track of how many times this itersates
+          node_current=open.find_best
+          if node_current==node_goal then #found the solution
+            #puts "Iterations: #{iterations}"
+            return node_current 
+          end       
+          generate_successor_nodes(node_current) do |node_successor|
+            #now doing for each successor node of node_current
+            node_successor.calc_g(node_current)
+            #skip to next node_successor if better one already on open or closed list
+            if open_successor=open.find(node_successor) then 
+              if open_successor<=node_successor then next end  #need to account for nil result
+            end
+            if closed_successor=closed.find(node_successor) then
+              if closed_successor<=node_successor then next end 
+            end
+            #still here, then there's no better node yet, so remove any copies of this node on open/closed lists
+            open.remove(node_successor)
+            closed.remove(node_successor)
+            # set the parent node of node_successor to node_current
+            node_successor.parent=node_current
+            # set h to be the estimated distance to node_goal using the heuristic
+            node_successor.calc_h(node_goal)
+            # so now we know this is the best copy of the node so far, so put it onto the open list
+            open.push(node_successor)
           end
-          if closed_successor=closed.find(node_successor) then
-            if closed_successor<=node_successor then next end 
-          end
-          #still here, then there's no better node yet, so remove any copies of this node on open/closed lists
-          open.remove(node_successor)
-          closed.remove(node_successor)
-          # set the parent node of node_successor to node_current
-          node_successor.parent=node_current
-          # set h to be the estimated distance to node_goal using the heuristic
-          node_successor.calc_h(node_goal)
-          # so now we know this is the best copy of the node so far, so put it onto the open list
-          open.push(node_successor)
+          #now we've gone through all the successors, so the current node can be closed
+          closed.push(node_current)
         end
-        #now we've gone through all the successors, so the current node can be closed
-        closed.push(node_current)
-      end
+      }
+    rescue Timeout::Error
+      return node_current
     end
       
     def co_ord(x,y)
