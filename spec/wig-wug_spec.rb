@@ -595,6 +595,16 @@ describe WigWug do
 
   context Digger do
     context "initialization" do
+      specify "should return the digger name" do
+        d = Digger.new
+        d.name.should == "WigWug::Digger"
+
+        d = Digger.new("My Digger Name")
+        d.name.should == "My Digger Name"
+
+        d.send(:initialize, "A Cool Name").should == "A Cool Name"
+      end
+
       specify "should create a Board" do
         Board.should_receive(:new).and_return("NEWBOARD")
         d = Digger.new

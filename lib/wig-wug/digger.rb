@@ -1,12 +1,17 @@
 module WigWug
 
   class Digger
-    def initialize
+    attr_reader :name
+
+    def initialize name = self.class.to_s
       @board = Board.new
+      @name = name
     end
 
     def move! distance, matrix
-      @board.update(distance, matrix)
+      # absolute value here since the Board class assumes it will receive a length
+      # only (no indication of direction), but the simulator does pass the direction
+      @board.update(distance.map{|d| d.abs}, matrix)
       move = pick_move
       @board.move(move)
       return move
