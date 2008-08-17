@@ -135,11 +135,13 @@ module AStar
       #shows the path back from node 'anode' by following the parent pointer
       curr=anode
       pathmap=@costmap.clone
+      pathmap[curr.y][curr.x]='X'
+      curr=curr.parent
       while curr.parent do
         pathmap[curr.y][curr.x]='*'
         curr=curr.parent
       end
-      pathmap[curr.y][curr.x]='*'
+      pathmap[curr.y][curr.x]='+'
       pathstr="\n"
       pathmap.each_index do |row|
         pathmap[row].each_index do |col|

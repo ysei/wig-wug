@@ -7,15 +7,15 @@ module WigWug
       class StarMapper
         attr_accessor :path
 
-        def initialize(board)
+        def initialize(board, timeout = 30)
           b = board.instance_variable_get("@board")
           k = b.keys
           xs = (k.map{|z| z[0]} << board.destinations[0][0]).sort
           ys = (k.map{|z| z[1]} << board.destinations[0][1]).sort
-          x_offset = xs.first
-          y_offset = ys.first
-          x_size = xs.last - xs.first + 1
-          y_size = ys.last - ys.first + 1
+          x_offset = xs.first - 1
+          y_offset = ys.first - 1
+          x_size = xs.last - xs.first + 3
+          y_size = ys.last - ys.first + 3
           cmap = Array.new(y_size){Array.new(x_size){1}}
           b.each do |k, v|
             case v
@@ -34,7 +34,7 @@ module WigWug
           amap = ::AStar::AMap.new(cmap)
           player = amap.co_ord(start[0], start[1])
           ruby = amap.co_ord(finish[0], finish[1])
-          route = amap.astar(player, ruby)
+          route = amap.astar(player, ruby, timeout)
           path = []
           current = route
           while current.parent do
@@ -42,11 +42,12 @@ module WigWug
             current = current.parent
           end
           @path =  path.map{|n| [n.x, n.y]} << start
+          puts amap.show_path(route) if $DEBUG
         end
       end
 
       def pick_move
-        path = StarMapper.new(@board).path
+        path = StarMapper.new(@board, 10).path
         first = path[-1]
         second = path[-2]
 
