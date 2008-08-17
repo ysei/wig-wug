@@ -41,6 +41,7 @@ module WigWug
           current = route
           while current.parent do
             path << current
+            raise "No current!" unless current
             current = current.parent
           end
           @path =  path.map{|n| [n.x, n.y]} << start
@@ -49,7 +50,7 @@ module WigWug
       end
 
       def pick_move
-        path = StarMapper.new(@board, 10).path
+        path = StarMapper.new(@board, 20).path
         first = path[-1]
         second = path[-2]
 
