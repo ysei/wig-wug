@@ -36,6 +36,7 @@ module WigWug
           player = amap.co_ord(start[0], start[1])
           ruby = amap.co_ord(finish[0], finish[1])
           route = amap.astar(player, ruby, timeout)
+          raise "No route!" unless route
           path = []
           current = route
           while current.parent do
