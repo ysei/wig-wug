@@ -10,8 +10,9 @@ module WigWug
         def initialize(board, timeout = 30)
           b = board.instance_variable_get("@board")
           k = b.keys
-          xs = (k.map{|z| z[0]} << board.destinations[0][0]).sort
-          ys = (k.map{|z| z[1]} << board.destinations[0][1]).sort
+          d = board.destinations.sort_by{rand}.first
+          xs = (k.map{|z| z[0]} << d[0]).sort
+          ys = (k.map{|z| z[1]} << d[1]).sort
           x_offset = xs.first - 1
           y_offset = ys.first - 1
           x_size = xs.last - xs.first + 3
@@ -30,7 +31,7 @@ module WigWug
             end
           end
           start = [ board.position[0] - x_offset, board.position[1] - y_offset ]
-          finish = [ board.destinations[0][0] - x_offset, board.destinations[0][1] - y_offset ]
+          finish = [ d[0] - x_offset, d[1] - y_offset ]
           amap = ::AStar::AMap.new(cmap)
           player = amap.co_ord(start[0], start[1])
           ruby = amap.co_ord(finish[0], finish[1])
