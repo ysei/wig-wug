@@ -9,9 +9,7 @@ module WigWug
     end
 
     def move! distance, matrix
-      # absolute value here since the Board class assumes it will receive a length
-      # only (no indication of direction), but the simulator does pass the direction
-      @board.update(distance.map{|d| d.abs}, matrix)
+      @board.update(distance, matrix)
       move = pick_move
       @board.move(move)
       return move
