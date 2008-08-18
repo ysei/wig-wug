@@ -19,10 +19,10 @@ module AStar
     end
     def find_best
       #finds the best node, then pops it out
-      best=@nodes.first
-      @nodes.each do |node|
-        if node.better?(best,@tbmul) then best=node end
-      end
+      best=@nodes.sort_by{|n| n.f}.first
+      #@nodes.each do |node|
+      #  if node.better?(best,@tbmul) then best=node end
+      #end
       remove(best)
     end
     def find(node)
