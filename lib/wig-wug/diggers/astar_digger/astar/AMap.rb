@@ -80,15 +80,15 @@ module AStar
     end
 
     def astar(node_start,node_goal, timeout = 60)
-      node_current = nil
+      node_current=nil
+      iterations=0
+      open=PriorityQueue.new()
+      closed=PriorityQueue.new()
+      node_start.calc_h(node_goal)
+      open.push(node_start)
       Timeout::timeout(timeout) {
-        iterations=0
-        open=PriorityQueue.new()
-        closed=PriorityQueue.new()
-        node_start.calc_h(node_goal)
-        open.push(node_start)
         while !open.empty? do
-          iterations+=1 #keep track of how many times this itersates
+          iterations+=1 #keep track of how many times this iterates
           node_current=open.find_best
           if node_current==node_goal then #found the solution
             puts "Astar Iterations: #{iterations}" if $DEBUG
@@ -137,11 +137,11 @@ module AStar
       pathmap=@costmap.clone
       pathmap[curr.y][curr.x]='X'
       curr=curr.parent
-      while curr.parent do
+      while curr and curr.parent do
         pathmap[curr.y][curr.x]='*'
         curr=curr.parent
       end
-      pathmap[curr.y][curr.x]='+'
+      pathmap[curr.y][curr.x]='+' if curr
       pathstr="\n"
       pathmap.each_index do |row|
         pathmap[row].each_index do |col|

@@ -4,10 +4,17 @@ module WigWug
   module Diggers
 
     class FAstarDigger < AstarDigger
+      def initialize
+        @path = []
+        super
+      end
+
       def pick_move
         2.times do
-          @path ||= StarMapper.new(@board, 20).path
+          @path = StarMapper.new(@board, 20).path unless @path.size >= 2
           first = @path.pop; second = @path[-1]
+
+          raise "No StarMap!" unless first and second
 
           d = :up    if first[1] < second[1]
           d = :down  if first[1] > second[1]
@@ -15,7 +22,7 @@ module WigWug
           d = :right if first[0] < second[0]
           return d if %w{ R O F }.include?(@board.look(d))
 
-          @path = nil
+          @path = []
         end
 
         raise "FOO"
