@@ -21,25 +21,22 @@ module WigWug
 
       def find_path(timeout = 30)
         b = @board.instance_variable_get("@board")
-        k = b.keys
         d = @board.destinations.sort_by{rand}.first
-        xs = (k.map{|z| z[0]} << d[0]).sort
-        ys = (k.map{|z| z[1]} << d[1]).sort
-        x_offset = xs.first - 1
-        y_offset = ys.first - 1
-        x_size = xs.last - xs.first + 3
-        y_size = ys.last - ys.first + 3
-        cmap = Array.new(y_size){Array.new(x_size){1}}
-        b.each do |k, v|
-          cmap[k[1] - y_offset][k[0] - x_offset] = set_cost(k, v)
-        end
+
+        x_offset, y_offset, x_size, y_size = calculate_bounds(b, d)
+
         start = [ @board.position[0] - x_offset, @board.position[1] - y_offset ]
         finish = [ d[0] - x_offset, d[1] - y_offset ]
+
+        cmap = build_cmap b, x_offset, y_offset, x_size, y_size
         amap = ::AStar::AMap.new(cmap)
+
         player = amap.co_ord(start[0], start[1])
         ruby = amap.co_ord(finish[0], finish[1])
         route = amap.astar(player, ruby, timeout)
         raise "No route!" unless route
+        puts amap.show_path(route) if $DEBUG
+
         path = []
         current = route
         while current.parent do
@@ -47,8 +44,29 @@ module WigWug
           raise "No current!" unless current
           current = current.parent
         end
-        puts amap.show_path(route) if $DEBUG
         path.map{|n| [n.x, n.y]} << start
+      end
+
+      def calculate_bounds b, d
+        k = b.keys
+
+        xs = (k.map{|z| z[0]} << d[0]).sort
+        ys = (k.map{|z| z[1]} << d[1]).sort
+
+        x_offset = xs.first - 1
+        y_offset = ys.first - 1
+        x_size = xs.last - xs.first + 3
+        y_size = ys.last - ys.first + 3
+
+        [ x_offset, y_offset, x_size, y_size ]
+      end
+
+      def build_cmap b, x_offset, y_offset, x_size, y_size
+        cmap = Array.new(y_size){Array.new(x_size){1}}
+        b.each do |k, v|
+          cmap[k[1] - y_offset][k[0] - x_offset] = set_cost(k, v)
+        end
+        cmap
       end
 
       def set_cost k, v
