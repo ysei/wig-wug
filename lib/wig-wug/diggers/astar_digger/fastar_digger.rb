@@ -6,12 +6,13 @@ module WigWug
     class FAstarDigger < AstarDigger
       def initialize
         @path = []
+        @timeout = 20
         super
       end
 
       def pick_move
         2.times do
-          @path = StarMapper.new(@board, 20).path unless @path.size >= 2
+          @path = find_path(@timeout) unless @path.size >= 2
           first = @path.pop; second = @path[-1]
 
           raise "No StarMap!" unless first and second
