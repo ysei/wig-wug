@@ -4,8 +4,13 @@ module WigWug
   module Diggers
 
     class AstarDigger < Digger
+      def initialize
+        @astar_timeout ||= 20
+        super
+      end
+
       def pick_move
-        path = find_path(20)
+        path = find_path
         first = path[-1]
         second = path[-2]
 
@@ -19,7 +24,7 @@ module WigWug
 
     private
 
-      def find_path(timeout = 30)
+      def find_path
         b = @board.instance_variable_get("@board")
         k = b.keys
         d = @board.destinations.sort_by{rand}.first
@@ -38,7 +43,7 @@ module WigWug
         amap = ::AStar::AMap.new(cmap)
         player = amap.co_ord(start[0], start[1])
         ruby = amap.co_ord(finish[0], finish[1])
-        route = amap.astar(player, ruby, timeout)
+        route = amap.astar(player, ruby, @astar_timeout)
         raise "No route!" unless route
         path = []
         current = route

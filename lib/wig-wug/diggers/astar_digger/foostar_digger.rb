@@ -21,9 +21,8 @@ module WigWug
 
       # cost is normal cost plus the log of the number of visits to that position
       def set_cost k, v
-        t = k.instance_variable_get("@visited").to_i
-        c = super.to_i
-        c + Math::log(t + 1).to_i
+        t = k.instance_variable_get("@visited")
+        t ? super + Math::log(t).to_i : super
       end
     end
 
