@@ -42,6 +42,10 @@ module WigWug
         raise "No route!" unless route
         puts amap.show_path(route) if $DEBUG
 
+        build_path(route, start)
+      end
+
+      def build_path route, start
         path = []
         current = route
         while current.parent do
