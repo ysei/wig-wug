@@ -27,18 +27,19 @@ module WigWug
       def find_path
         b = @board.instance_variable_get("@board")
         d = @board.destinations.sort_by{rand}.first
+        p = @board.position
 
         x_offset, y_offset, x_size, y_size = calculate_bounds(b, d)
 
-        start = [ @board.position[0] - x_offset, @board.position[1] - y_offset ]
+        start  = [ p[0] - x_offset, p[1] - y_offset ]
         finish = [ d[0] - x_offset, d[1] - y_offset ]
 
         cmap = build_cmap b, x_offset, y_offset, x_size, y_size
         amap = ::AStar::AMap.new(cmap)
 
         player = amap.co_ord(start[0], start[1])
-        ruby = amap.co_ord(finish[0], finish[1])
-        route = amap.astar(player, ruby, @astar_timeout)
+        ruby   = amap.co_ord(finish[0], finish[1])
+        route  = amap.astar(player, ruby, @astar_timeout)
         raise "No route!" unless route
         puts amap.show_path(route) if $DEBUG
 
