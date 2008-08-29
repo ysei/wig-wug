@@ -9,10 +9,10 @@ module WigWug
         position = @board.position
         board = @board.instance_variable_get("@board")
         keys = board.keys
-        key = board.select{|k, v| k == position}.first.first
+        key = keys.find{|k| k == position}
 
-        v = key.instance_variable_get("@visited")
-        key.instance_variable_set("@visited", v.to_i + 1)
+        v = key.instance_variable_get("@visited").to_i
+        key.instance_variable_set("@visited", v + 1)
 
         super
       end
