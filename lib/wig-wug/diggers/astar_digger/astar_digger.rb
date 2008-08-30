@@ -5,7 +5,7 @@ module WigWug
 
     class AstarDigger < Digger
       def initialize
-        @astar_timeout ||= 20
+        @astar_timeout ||= 300
         super
       end
 
