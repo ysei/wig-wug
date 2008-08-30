@@ -79,7 +79,7 @@ module AStar
       end    
     end
 
-    def astar(node_start,node_goal, timeout = 60)
+    def astar(node_start,node_goal, timeout = 900)
       node_current=nil
       iterations=0
       open=PriorityQueue.new()
