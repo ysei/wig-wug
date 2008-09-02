@@ -1,3 +1,5 @@
+require File.join(File.dirname(__FILE__), '..', 'digger')
+
 module WigWug
   module Diggers
 

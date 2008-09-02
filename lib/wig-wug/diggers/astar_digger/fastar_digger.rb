@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'astar', 'AMap')
+require File.join(File.dirname(__FILE__), 'astar_digger')
 
 module WigWug
   module Diggers

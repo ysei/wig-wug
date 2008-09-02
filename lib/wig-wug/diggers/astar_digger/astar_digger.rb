@@ -1,3 +1,4 @@
+require File.join(File.dirname(__FILE__), '..', '..', 'digger')
 require File.join(File.dirname(__FILE__), 'astar', 'AMap')
 
 module WigWug
