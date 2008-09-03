@@ -602,6 +602,9 @@ describe WigWug do
         d = Digger.new("My Digger Name")
         d.name.should == "My Digger Name"
 
+        d = Digger.new(nil)
+        d.name.should == "WigWug::Digger"
+
         d.send(:initialize, "A Cool Name").should == "A Cool Name"
       end
 
@@ -609,6 +612,18 @@ describe WigWug do
         Board.should_receive(:new).and_return("NEWBOARD")
         d = Digger.new
         d.instance_variable_get("@board").should == "NEWBOARD"
+      end
+
+      specify "should just use an already initialized Board" do
+        Board.should_receive(:new).and_return("NEWBOARD")
+        d = Digger.new
+        d.instance_variable_get("@board").should == "NEWBOARD"
+
+        b = d.instance_variable_set("@board", "FOOZLEBOARD")
+        d.send(:initialize)
+        b = d.instance_variable_get("@board")
+
+        b.should == "FOOZLEBOARD"
       end
     end
 

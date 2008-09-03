@@ -5,9 +5,9 @@ module WigWug
   class Digger
     attr_reader :name
 
-    def initialize name = self.class.to_s
-      @board = Board.new
-      @name = name
+    def initialize name = nil
+      @board ||= Board.new
+      @name = name || self.class.to_s
     end
 
     def move! distance, matrix
