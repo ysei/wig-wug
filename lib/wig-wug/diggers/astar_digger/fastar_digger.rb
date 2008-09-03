@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'astar_digger')
 module WigWug
   module Diggers
 
-    class FAstarDigger < OldAstarDigger
+    class FAstarDigger < AstarDigger
       def initialize
         @path = []
         super
