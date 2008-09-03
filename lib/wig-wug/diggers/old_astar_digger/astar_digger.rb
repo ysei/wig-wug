@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), 'astar', 'AMap')
 module WigWug
   module Diggers
 
-    class AstarDigger < Digger
+    class OldAstarDigger < Digger
       def initialize
         @astar_timeout ||= 300
         super
